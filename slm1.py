@@ -4,7 +4,7 @@ from util import codeblock_strip
 
 model_name = 'qwen2.5:3b'
 
-def generate_steps(des, sysinfo=""):
+def generate_steps(des: str, sysinfo: str = "") -> list:
     try:
         response = ollama.generate(
             model=model_name,
