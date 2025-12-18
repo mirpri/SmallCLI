@@ -1,8 +1,9 @@
 import ollama
 from util import codeblock_strip
 import os
+from schema import AgentContext
 
-def parse_file_edit_instructions(instructions, context=""):
+def parse_file_edit_instructions(instructions, context: AgentContext):
     try:
         response = ollama.generate(
             model='qwen2.5-coder:1.5b',
@@ -66,7 +67,7 @@ def parse_file_edit_instructions(instructions, context=""):
                         输入指令：{instructions}
 
                         上下文信息：
-                        {context}
+                        {context.to_prompt_string()}
 
                         文件原始内容：
                         {'\n'.join(content) if len(content) > 0 else '原始文件为空'}'''
@@ -88,18 +89,19 @@ def apply_file_edit(filename, modified_content):
         print(f"更新文件时出错: {e}")
         return False
 
-def file_edit_exec(instructions, context=""):
+def file_edit_exec(instructions, context: AgentContext):
     filename, modified_content = parse_file_edit_instructions(instructions, context=context)
     if filename and modified_content:
         return apply_file_edit(filename, modified_content)
     return False
 
 if __name__ == "__main__":
+    dummy_context = AgentContext(sys_info="Linux Test System")
     while True:
         user_input = input("请输入文件编辑指令（'q' 退出）：")
         if user_input.lower() == 'q':
             break
-        success = file_edit_exec(user_input)
+        success = file_edit_exec(user_input, dummy_context)
         if success:
             print("文件编辑操作完成。")
         else:

@@ -1,8 +1,9 @@
 import ollama
 import subprocess
 from util import codeblock_strip
+from schema import AgentContext
 
-def command_from_description(des,context=""):
+def command_from_description(des, context: AgentContext):
     try:
         response = ollama.generate(
             model='qwen2.5-coder:1.5b',
@@ -26,7 +27,7 @@ def command_from_description(des,context=""):
                         输出：["sudo pacman -S gcc --noconfirm"]
 
                         注意：输出必须只包含 Python List，不要包含任何Markdown代码块（如```python）。
-                        上下文信息：'''+ context +'''
+                        上下文信息：'''+ context.to_prompt_string() +'''
                         现在请处理：
                         输入：''' + des
 
@@ -40,10 +41,10 @@ def command_from_description(des,context=""):
 
     except Exception as e:
         print(f"error: {e}")
-        return command_from_description(des,context)
+        return command_from_description(des, context)
 
 
-def command_fix(old_command, error, context=""):
+def command_fix(old_command, error, context: AgentContext):
     try:
         response = ollama.generate(
             model="qwen2.5:3b",
@@ -64,14 +65,14 @@ def command_fix(old_command, error, context=""):
                         现在请处理：
                         输入命令：''' + old_command + '''
                         错误信息：''' + error + '''
-                        上下文信息：''' + context
+                        上下文信息：''' + context.to_prompt_string()
         )
         fixed_command = codeblock_strip(response['response'])
         return fixed_command
 
     except Exception as e:
         print(f"error: {e}")
-        return command_fix(old_command, error)
+        return command_fix(old_command, error, context)
 
 
 def command_exec(command):
@@ -82,18 +83,19 @@ def command_exec(command):
         return "", str(e)
 
 if __name__ == "__main__":
+    dummy_context = AgentContext(sys_info="Linux Test System")
     while True:
         user_input = input("请输入 Linux 命令描述（'q' 退出）：")
         if user_input.lower() == 'q':
             break
-        command=command_from_description(user_input)
+        command=command_from_description(user_input, dummy_context)
         print(command)
         if (input("是否执行该命令(y/n)? ").lower()=="y"):
             out, err=command_exec(command)
             print(out,err)
             while err:
                 print("命令执行出错，尝试修正命令...")
-                command=command_fix(command, err)
+                command=command_fix(command, err, dummy_context)
                 print(f"修正后命令：{command}")
                 if (input("是否执行该命令(y/n)? ").lower()!="y"):
                     break

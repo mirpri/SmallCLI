@@ -3,6 +3,7 @@ import time
 from util import codeblock_strip
 from dotenv import load_dotenv
 import os
+from schema import AgentContext
 
 load_dotenv()
 
@@ -13,7 +14,7 @@ model_name = "deepseek/deepseek-v3.2-exp"
 client = openai.OpenAI(api_key=api_key, base_url=base_url)
 
 
-def generate_steps(des, sysinfo=""):
+def generate_steps(des, context: AgentContext):
     try:
         response = client.chat.completions.create(
             model=model_name,
@@ -57,7 +58,7 @@ def generate_steps(des, sysinfo=""):
                     + des
                     + """
                 当前系统信息："""
-                    + sysinfo,
+                    + context.sys_info,
                 },
             ],
             stream=False,
@@ -71,7 +72,7 @@ def generate_steps(des, sysinfo=""):
         print(f"error: {e}")
         print("retrying...")
         time.sleep(1)
-        return generate_steps(des)
+        return generate_steps(des, context)
 
 
 if __name__ == "__main__":
@@ -79,7 +80,9 @@ if __name__ == "__main__":
         user_input = input("请输入任务描述（'q' 退出）：")
         if user_input.lower() == "q":
             break
-        steps = generate_steps(user_input)
+        # Dummy context for testing
+        dummy_context = AgentContext(sys_info="Linux Test System")
+        steps = generate_steps(user_input, dummy_context)
         if not steps:
             continue
         for step in steps:
