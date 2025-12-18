@@ -14,6 +14,15 @@ ollam serve
 
 Each slm can be run individually for testing. Run orchestrator.py to try agent.
 
+start server:
+```bash
+# extra dependencies
+pip install fastapi uvicorn[standard]
+```
+```bash
+uvicorn server:app --reload
+```
+
 ## Examples
 Successful interactions:
 ```
