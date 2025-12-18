@@ -1,5 +1,6 @@
 # SLM CLI Agent
 ## Setup
+### backend
 ```bash
 conda create -n slmagent python=3.12
 pip install ollama openai dotenv
@@ -20,7 +21,24 @@ start server:
 pip install fastapi uvicorn[standard]
 ```
 ```bash
-uvicorn server:app --reload
+uvicorn server:app
+```
+use flag `--reload` for dev.
+
+### frontend
+Front end is implemented with `node.js`, install node.js and npm if you haven't.
+
+```bash
+cd ./cli-frontend
+npm install
+npm link # may require sudo
+```
+
+Then, you can run CLI anywhere with command `agent`.
+
+undo linking:
+```bash
+npm unlink agent
 ```
 
 ## Examples

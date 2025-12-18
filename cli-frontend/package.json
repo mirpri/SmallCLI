@@ -1,0 +1,19 @@
+{
+  "name": "smallcli-frontend",
+  "version": "1.0.0",
+  "description": "Node.js CLI frontend for SmallCLI Agent",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "agent": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.0",
+    "ora": "^7.0.1"
+  }
+}
