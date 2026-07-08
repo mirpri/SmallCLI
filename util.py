@@ -1,4 +1,4 @@
-def codeblock_strip(text: str) -> str:
+def codeblock_strip(text: str|None) -> str:
     if not text:
         return ""
 

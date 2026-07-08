@@ -4,10 +4,10 @@ from langgraph.graph import StateGraph, END
 from schema import AgentContext
 
 # Import your existing modules
-import slm1_online_llm as slm1
-import slm2
-import slm3
-import llm1
+import models.slm1_online_llm as slm1
+import models.slm2 as slm2
+import models.slm3 as slm3
+import models.llm1 as llm1
 
 # --- 1. Define the State (Context Management) ---
 class AgentState(TypedDict):
@@ -259,8 +259,9 @@ app = workflow.compile()
 
 if __name__ == "__main__":
     # Initial Setup
-    sysinfo_list = slm2.command_exec("cat /etc/os-release")
-    sysinfo = sysinfo_list[0] if sysinfo_list else "Unknown System"
+    # sysinfo_list = slm2.command_exec("cat /etc/os-release")
+    # sysinfo = sysinfo_list[0] if sysinfo_list else "Unknown System"
+    sysinfo = "Linux Test System (Local)"
     
     user_prompt = input("> ")
     

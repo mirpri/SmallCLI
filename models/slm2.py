@@ -1,5 +1,5 @@
 import ollama
-import subprocess
+# subprocess import moved to frontend
 from util import codeblock_strip
 from schema import AgentContext
 
@@ -75,12 +75,8 @@ def command_fix(old_command, error, context: AgentContext):
         return command_fix(old_command, error, context)
 
 
-def command_exec(command):
-    try:
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
-        return result.stdout, result.stderr
-    except Exception as e:
-        return "", str(e)
+# command_exec has been moved to frontend to support realtime output streaming
+# def command_exec(command): ...
 
 if __name__ == "__main__":
     dummy_context = AgentContext(sys_info="Linux Test System")
@@ -89,15 +85,5 @@ if __name__ == "__main__":
         if user_input.lower() == 'q':
             break
         command=command_from_description(user_input, dummy_context)
-        print(command)
-        if (input("是否执行该命令(y/n)? ").lower()=="y"):
-            out, err=command_exec(command)
-            print(out,err)
-            while err:
-                print("命令执行出错，尝试修正命令...")
-                command=command_fix(command, err, dummy_context)
-                print(f"修正后命令：{command}")
-                if (input("是否执行该命令(y/n)? ").lower()!="y"):
-                    break
-                out, err=command_exec(command)
-                print(out,err)
+        print(f"Generated Command: {command}")
+        print("(Execution is now handled by the frontend client)")

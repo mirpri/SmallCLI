@@ -6,7 +6,7 @@ import uuid
 from langgraph.checkpoint.memory import MemorySaver
 from orchestrator_langgraph import workflow, AgentState
 from schema import AgentContext
-import slm2
+import models.slm2
 
 app = FastAPI()
 
