@@ -2,3 +2,9 @@
 __pycache__/
 playground/
 node_modules/
+.venv/
+
+# Stage 1 generated datasets (keep data/dataset_info.json tracked)
+data/*.jsonl
+# Stage 2 trained LoRA adapters
+adapters/

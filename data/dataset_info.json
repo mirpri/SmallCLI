@@ -1,0 +1,26 @@
+{
+  "leap_planner": {
+    "file_name": "planner.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "leap_executor": {
+    "file_name": "executor.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "leap_debugger": {
+    "file_name": "debugger.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  }
+}

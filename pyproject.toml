@@ -1,0 +1,24 @@
+[project]
+name = "leap-cli-agent"
+version = "0.1.0"
+description = "LEAP: 单冻结底座 + 三 LoRA 专家热切换的端侧 CLI Agent（后端/编排/数据蒸馏）"
+readme = "readme.md"
+requires-python = ">=3.12"   # slm3.py 在 f-string 表达式里用了反斜杠，需 3.12 (PEP 701)
+dependencies = [
+    "openai>=1.0",           # data_gen 蒸馏(连 DeepSeek) + models/llm1_online
+    "python-dotenv>=1.0",    # 读取 .env
+    "langgraph>=0.2",        # orchestrator 编排
+    "pydantic>=2.0",         # schema
+    "fastapi>=0.110",        # server
+    "uvicorn[standard]>=0.29",
+]
+
+# 端侧推理引擎为 llama.cpp(单独编译)，不作为 Python 依赖。
+[project.optional-dependencies]
+# 旧的 ollama 后端（models/slm*.py 迁移到 llama.cpp 前若要跑 Baseline A 用）：
+#   uv sync --extra ollama
+ollama = ["ollama>=0.3"]
+
+[tool.uv]
+# 本仓库是"应用"而非可安装库(代码是平铺脚本)，只装依赖、不构建本项目自身。
+package = false
